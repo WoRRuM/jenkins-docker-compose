@@ -19,7 +19,7 @@ pipeline {
                     git config user.name "Yury Igonin"
                     git add job.log
                     git commit -m "Update job.log"
-                    git push
+		    git push --set-upstream origin main
                     '''
                 }
             }
