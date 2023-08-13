@@ -2,21 +2,41 @@ pipeline {
     agent any
 
     stages {
-        stage('Clone Repository') {
+        stage('Checkout') {
             steps {
-                checkout scm
+                // This will checkout your GitHub repository from the main branch
+                git credentialsId: 'github-credentials', url: 'https://github.com/WoRRuM/jenkins-docker-compose.git', branch: 'main'
             }
         }
 
         stage('Update job.log') {
             steps {
-                sh '''
-                echo "$(date) - PR job executed" >> job.log
-                git add job.log
-                git commit -m "Update job.log"
-                git push
-                '''
+                script {
+                    sh 'echo "$(date) - PR job executed" >> job.log'
+                    
+                    sh '''
+                    git config user.email "qeuiran@gmail.com"
+                    git config user.name "Yury Igonin"
+                    git add job.log
+                    git commit -m "Update job.log"
+                    git push
+                    '''
+                }
             }
+        }
+
+        stage('Send Email') {
+            steps {
+                mail body: "Jenkins pipeline result: ${currentBuild.result}. Check the repository at https://github.com/WoRRuM/jenkins-docker-compose",
+                     to: 'gurov@surf.dev',
+                     subject: "Jenkins Pipeline Result - ${currentBuild.result}"
+            }
+        }
+    }
+    
+    post {
+        always {
+            load 'ci/job.jenkins'
         }
     }
 }
