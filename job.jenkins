@@ -37,6 +37,15 @@ pipeline {
 	always {
             echo 'One way or another, I have finished'
             deleteDir() /* clean up our workspace */
+	    emailext (
+            to: 'recipient@example.com',
+            subject: "Build: ${currentBuild.fullDisplayName}",
+            body: '''${SCRIPT, template="groovy-html.template"}
+                    Build: ${BUILD_URL}
+                    Log: ${BUILD_LOG, maxLines=500}
+                 ''',
+            mimeType: 'text/html'
+        )
         }
         failure {
         mail to: 'yigoninwork@gmail.com',
