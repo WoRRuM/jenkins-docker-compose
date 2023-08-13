@@ -1,0 +1,50 @@
+version: '3'
+
+services:
+  jenkins-server:
+    image: jenkins/jenkins:lts
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins-data:/var/jenkins_home
+    environment:
+      - JENKINS_SLAVE_AGENT_PORT=50000
+    networks:
+      - jenkins
+
+  jenkins-docker:
+    image: docker:dind
+    container_name: jenkins-docker
+    privileged: true
+    environment:
+      - DOCKER_TLS_CERTDIR=/certs
+    volumes:
+      - jenkins-docker-certs:/certs/client
+      - jenkins-data:/var/jenkins_home
+    ports:
+      - "2376:2376"
+    networks:
+      jenkins:
+        aliases:
+          - docker
+    command: --storage-driver overlay2
+
+  jenkins-agent:
+    image: jenkins/ssh-agent:alpine-jdk17
+    ports:
+      - "22:22"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - JENKINS_AGENT_SSH_PUBKEY="ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDiwKD01SQad6rsgG9UN/2WITTrvYa/7Rf9uCXXitvJRdEInbAKJrR/8L/8wrPN5gjZ2Xe9dm+BZ25rhGpp9/c8aUzkuk1JzizCd0QTtkPLo6iflOxWPk0mGS1RcskuKLa57bfSoEBZt5Zi9gHUZsdOc84X2O4LyyyopZuJ1TrBb6/eavx1aJKKU3quRNUYKja6/mUh5xWC6AanX1+vtErVZfSTWNp8+LwooHWKuUBnBXOMN5a6YOttfRub/0+LmdaMey6L/UCzdcjKOE71J1CeWxNIKC2DMO/qH/zVPF9zSyr4KKcdelKypEcScM0S0UNUVglG5EyCVTW/x/gFsJjcwLrYpvjYN8nkxpN9rXN4mBMK95ai1cfAK+CUXoYadxqY1uM6HUHlLaStncth9TWSzCIynso4SzMPT1N1z+01+y118bkG+nKkZ4RrbVIfj2ChNrOOu8ymst1cI/30zSLaO4h++ML6A7dIrwGpn09Nl28kxjS8rPXaa1S+Ty1uN5E= user@5cd0183h5z"
+    networks:
+      - jenkins
+
+networks:
+  jenkins:
+
+volumes:
+  jenkins-data:
+  jenkins-docker-certs:
+
