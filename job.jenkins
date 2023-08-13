@@ -37,6 +37,13 @@ pipeline {
     post {
         always {
             load 'job.jenkins'
+	    emailext (
+            to: 'gurov@surf.dev',
+            subject: "Jenkins Pipeline: ${currentBuild.fullDisplayName}",
+            body: '''${SCRIPT, template="groovy-html.template"}''',
+            mimeType: 'text/html',
+            attachLog: true
+        )
         }
     }
 }
