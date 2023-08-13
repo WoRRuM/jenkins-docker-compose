@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git credentialsId: 'user', url: 'https://github.com/WoRRuM/jenkins-docker-compose.git', branch: 'main'
+                git credentialsId: 'nah', url: 'https://github.com/WoRRuM/jenkins-docker-compose.git', branch: 'main'
             }
         }
 
