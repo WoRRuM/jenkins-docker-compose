@@ -18,7 +18,7 @@ pipeline {
                         git add job.log
                         git commit -m "Updated job.log"
                     """
-                }
+                }/
             }
         }
 
@@ -30,7 +30,19 @@ pipeline {
             }
         }
     }
-
+        stage('Email Notification') {
+            steps {
+                script {
+                    def pipelineResult = currentBuild.result
+                    def emailContent = "Jenkins pipeline result: ${pipelineResult}"
+                    
+                    emailext (
+                        subject: "Pipeline ${pipelineResult}: ${currentBuild.fullDisplayName}",
+                        body: emailContent,
+                        to: 'yurkanice2134@gmail.com'
+                    )
+                }
+            }
     post {
         always {
             script {
