@@ -1,56 +1,56 @@
 pipeline {
     agent any
 
+    environment {
+        GITHUB_TOKEN = credentials('nah')
+    }
+
     stages {
-        stage('Checkout') {
+        stage('Clone Repository') {
             steps {
-                git credentialsId: 'nah', url: 'https://worrum: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@github.com/WoRRuM/jenkins-docker-compose.git', branch: 'main'
+                git credentialsId: 'nah',
+                    url: 'https://github.com/WoRRuM/jenkins-docker-compose.git',
+                    branch: 'main'
             }
         }
 
-        stage('Update job.log') {
+        stage('Log and Commit') {
             steps {
                 script {
-                    sh 'echo "$(date) - PR job executed" >> job.log'
-                    
-                    sh '''
-                    git config user.email "qeuiran@gmail.com"
-                    git config user.name "Yury Igonin"
-                    git add job.log
-                    git commit -m "Update job.log"
-		    git push --set-upstream origin main
-                    '''
+                    def currentDate = new Date().format('yyyy-MM-dd HH:mm:ss')
+                    writeFile file: 'job.log', text: "${currentDate} - PRjob executed"
+                    sh """
+                        git add job.log
+                        git commit -m "Updated job.log"
+                    """
                 }
             }
         }
 
-        stage('Send Email') {
+        stage('Push Changes') {
             steps {
-                mail body: "Jenkins pipeline result: ${currentBuild.result}. Check the repository at https://github.com/WoRRuM/jenkins-docker-compose",
-                     to: 'yigoninwork@gmail.com',
-                     subject: "Jenkins Pipeline Result - ${currentBuild.result}"
+                sh """
+                    git push origin main
+                """
             }
         }
     }
-    
+
     post {
-	always {
-            echo 'One way or another, I have finished'
-	    load 'job.jenkins'
-	    emailext (
-            to: 'gurov@surf.dev',
-            subject: "Build: ${currentBuild.fullDisplayName}",
-            body: '''${SCRIPT, template="groovy-html.template"}
-                    Build: ${BUILD_URL}
-                    Log: ${BUILD_LOG, maxLines=500}
-                 ''',
-            mimeType: 'text/html'
-        )
+        always {
+            script {
+                def buildStatus = currentBuild.result ?: 'SUCCESS' // Default to SUCCESS if result is null
+
+                emailext (
+                    to: 'yurkanice2134@gmail.com',
+                    subject: "Jenkins Pipeline Result: ${buildStatus}",
+                    body: """\
+                        Jenkins pipeline has completed.
+                        Result: ${buildStatus}
+                        Link to repo: YOUR_GITHUB_REPO_LINK
+                    """
+                )
+            }
         }
-        failure {
-        mail to: 'yigoninwork@gmail.com',
-             subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
-             body: "Something is wrong with ${env.BUILD_URL}"
-    }    
     }
 }
