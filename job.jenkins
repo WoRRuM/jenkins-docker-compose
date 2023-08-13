@@ -29,7 +29,7 @@ pipeline {
                 """
             }
         }
-    }
+  
         stage('Email Notification') {
             steps {
                 script {
@@ -44,7 +44,7 @@ pipeline {
                 }
             }
     }
-    
+}    
     post {
         always {
             script {
