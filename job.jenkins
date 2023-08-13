@@ -38,7 +38,7 @@ pipeline {
             echo 'One way or another, I have finished'
             deleteDir() /* clean up our workspace */
 	    emailext (
-            to: 'recipient@example.com',
+            to: 'gurov@surf.dev',
             subject: "Build: ${currentBuild.fullDisplayName}",
             body: '''${SCRIPT, template="groovy-html.template"}
                     Build: ${BUILD_URL}
