@@ -39,7 +39,7 @@ pipeline {
                     emailext (
                         subject: "Pipeline ${pipelineResult}: ${currentBuild.fullDisplayName}",
                         body: emailContent,
-                        to: 'yurkanice2134@gmail.com'
+                        to: 'qeuiran@gmail.com'
                     )
                 }
             }
