@@ -5,7 +5,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // This will checkout your GitHub repository from the main branch
-                git credentialsId: 'github', url: 'https://github.com/WoRRuM/jenkins-docker-compose.git', branch: 'main'
+                git credentialsId: 'github', url: 'git@github.com:WoRRuM/jenkins-docker-compose.git', branch: 'main'
             }
         }
 
@@ -37,13 +37,10 @@ pipeline {
     post {
         always {
             load 'job.jenkins'
-	    emailext (
-            to: 'gurov@surf.dev',
-            subject: "Jenkins Pipeline: ${currentBuild.fullDisplayName}",
-            body: '''${SCRIPT, template="groovy-html.template"}''',
-            mimeType: 'text/html',
-            attachLog: true
-        )
+	
+	    mail body: "Jenkins pipeline result: ${currentBuild.result}. Check the repository at https://github.com/your-username/your-repository.git",
+                 to: 'gurov@surf.dev',
+                 subject: "Jenkins Pipeline Result - ${currentBuild.result}"    
         }
     }
 }
