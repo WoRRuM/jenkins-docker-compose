@@ -35,15 +35,6 @@ pipeline {
     
     post {
         always {
-	    emailext (
-            	to: 'recipient@example.com',
-            	subject: "Build: ${currentBuild.fullDisplayName}",
-            	body: '''${SCRIPT, template="groovy-html.template"}
-                    	Build: ${BUILD_URL}
-                    	Log: ${BUILD_LOG, maxLines=500}
-                     '',
-            	mimeType: 'text/html'
-             )
         }
     }
 }
