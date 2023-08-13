@@ -35,7 +35,6 @@ pipeline {
     
     post {
         always {
-            load 'job.jenkins'
 	
 	    mail body: "Jenkins pipeline result: ${currentBuild.result}. Check the repository at https://github.com/WoRRuM/jenkins-docker-compose.git",
                  to: 'gurov@surf.dev',
