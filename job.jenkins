@@ -1,0 +1,22 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Clone Repository') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Update job.log') {
+            steps {
+                sh '''
+                echo "$(date) - PR job executed" >> job.log
+                git add job.log
+                git commit -m "Update job.log"
+                git push
+                '''
+            }
+        }
+    }
+}
