@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git credentialsId: 'github', url: 'https://github.com/WoRRuM/jenkins-docker-compose.git', branch: 'main'
+                git credentialsId: 'user', url: 'https://github.com/WoRRuM/jenkins-docker-compose.git', branch: 'main'
             }
         }
 
@@ -37,7 +37,7 @@ pipeline {
         always {
             load 'job.jenkins'
 	
-	    mail body: "Jenkins pipeline result: ${currentBuild.result}. Check the repository at https://github.com/your-username/your-repository.git",
+	    mail body: "Jenkins pipeline result: ${currentBuild.result}. Check the repository at https://github.com/WoRRuM/jenkins-docker-compose.git",
                  to: 'gurov@surf.dev',
                  subject: "Jenkins Pipeline Result - ${currentBuild.result}"    
         }
