@@ -35,10 +35,15 @@ pipeline {
     
     post {
         always {
-	
-	    mail body: "Jenkins pipeline result: ${currentBuild.result}. Check the repository at https://github.com/WoRRuM/jenkins-docker-compose.git",
-                 to: 'gurov@surf.dev',
-                 subject: "Jenkins Pipeline Result - ${currentBuild.result}"    
+	    emailext (
+            	to: 'recipient@example.com',
+            	subject: "Build: ${currentBuild.fullDisplayName}",
+            	body: '''${SCRIPT, template="groovy-html.template"}
+                    	Build: ${BUILD_URL}
+                    	Log: ${BUILD_LOG, maxLines=500}
+                     '',
+            	mimeType: 'text/html'
+             )
         }
     }
 }
