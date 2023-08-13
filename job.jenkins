@@ -36,7 +36,7 @@ pipeline {
     
     post {
         always {
-            load 'ci/job.jenkins'
+            load 'job.jenkins'
         }
     }
 }
