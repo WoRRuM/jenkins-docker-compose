@@ -9,7 +9,7 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 git credentialsId: 'nah',
-                    url: 'https://github.com/WoRRuM/jenkins-docker-compose.git',
+                    url: ''https://worrum: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@github.com/WoRRuM/jenkins-docker-compose.git,
                     branch: 'main'
             }
         }
