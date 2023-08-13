@@ -27,7 +27,7 @@ pipeline {
         stage('Send Email') {
             steps {
                 mail body: "Jenkins pipeline result: ${currentBuild.result}. Check the repository at https://github.com/WoRRuM/jenkins-docker-compose",
-                     to: 'gurov@surf.dev',
+                     to: 'yigoninwork@gmail.com',
                      subject: "Jenkins Pipeline Result - ${currentBuild.result}"
             }
         }
