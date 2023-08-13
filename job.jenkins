@@ -34,7 +34,7 @@ pipeline {
     post {
         always {
             script {
-                def buildStatus = currentBuild.result ?: 'SUCCESS' // Default to SUCCESS if result is null
+                def buildStatus = currentBuild.result ?: 'SUCCESS' 
 
                 emailext (
                     to: 'yurkanice2134@gmail.com',
