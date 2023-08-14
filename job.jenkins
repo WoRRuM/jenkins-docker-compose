@@ -1,10 +1,6 @@
 pipeline {
     agent any
     
-    environment {
-        GITHUB_TOKEN = credentials('github') 
-    }
-    
     stages {
         
         stage('Checkout') {
@@ -53,7 +49,7 @@ pipeline {
                 """
 
                 mail(
-                    to: 'gurov@surf.dev',
+                    to: 'gurov@surf.dev, qeuiran@gmail.com',
                     subject: emailSubject,
                     body: emailBody
                 )
