@@ -58,7 +58,7 @@ post {
             """
 
             mail(
-                to: 'yurkanice2134@gmail.com',
+                to: ''gurov@surf.dev,
                 subject: emailSubject,
                 body: emailBody
             )
