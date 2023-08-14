@@ -9,8 +9,10 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                def gitUrl = "https://worrum:${env.GITHUB_TOKEN}@github.com/WoRRuM/jenkins-docker-compose.git"
-                git url: gitUrl, branch: 'main'
+                script {
+                    def gitUrl = "https://worrum:${env.GITHUB_TOKEN}@github.com/WoRRuM/jenkins-docker-compose.git"
+                    git url: gitUrl, branch: 'main'
+                }
             }
         }
 
@@ -36,27 +38,25 @@ pipeline {
         }
   
     }
-    
 
-post {
-    always {
-        script {
-            def buildStatus = currentBuild.result ?: 'SUCCESS'
-            def emailSubject = "Jenkins Pipeline Result: ${buildStatus}"
-            def emailBody = """
-                Jenkins pipeline has completed.
-                Result: ${buildStatus}
-                link to repo: https://github.com/WoRRuM/jenkins-docker-compose.git
-            """
+    post {
+        always {
+            script {
+                def buildStatus = currentBuild.result ?: 'SUCCESS'
+                def emailSubject = "Jenkins Pipeline Result: ${buildStatus}"
+                def emailBody = """
+                    Jenkins pipeline has completed.
+                    Result: ${buildStatus}
+                    link to repo: https://github.com/WoRRuM/jenkins-docker-compose.git
+                """
 
-            mail(
-                to: 'gurov@surf.dev',
-                subject: emailSubject,
-                body: emailBody
-            )
+                mail(
+                    to: 'gurov@surf.dev',
+                    subject: emailSubject,
+                    body: emailBody
+                )
+            }
         }
     }
 }
 
-
-}
