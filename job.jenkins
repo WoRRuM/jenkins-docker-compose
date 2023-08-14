@@ -6,16 +6,18 @@ pipeline {
     }
     
     stages {
-
+        
         stage('Checkout') {
             steps {
-                script {
-                    def gitUrl = 'https://worrum:${env.GITHUB_TOKEN}@github.com/WoRRuM/jenkins-docker-compose.git'
-                    git url: gitUrl, branch: 'main'
+                withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
+                    script {
+                        def gitUrl = "https://worrum:${GITHUB_TOKEN}@github.com/WoRRuM/jenkins-docker-compose.git"
+                        git url: gitUrl, branch: 'main'
+                    }
                 }
             }
         }
-
+ 
         stage('Log and Commit') {
             steps {
                 script {
