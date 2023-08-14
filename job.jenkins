@@ -45,21 +45,26 @@ pipeline {
             }
     }
 }    
-    post {
-        always {
-            script {
-                def buildStatus = currentBuild.result ?: 'SUCCESS' 
 
-                emailext (
-                    to: 'yurkanice2134@gmail.com',
-                    subject: "Jenkins Pipeline Result: ${buildStatus}",
-                    body: """\
-                        Jenkins pipeline has completed.
-                        Result: ${buildStatus}
-                        link to repo: https://github.com/WoRRuM/jenkins-docker-compose.git 
-                    """
-                )
-            }
+post {
+    always {
+        script {
+            def buildStatus = currentBuild.result ?: 'SUCCESS'
+            def emailSubject = "Jenkins Pipeline Result: ${buildStatus}"
+            def emailBody = """
+                Jenkins pipeline has completed.
+                Result: ${buildStatus}
+                link to repo: https://github.com/WoRRuM/jenkins-docker-compose.git
+            """
+
+            mail(
+                to: 'yurkanice2134@gmail.com',
+                subject: emailSubject,
+                body: emailBody
+            )
         }
     }
+}
+
+
 }
